@@ -1,5 +1,8 @@
 Black Mesa build 19042901 compatibility validation - 2026-10-16
 
+Historical port validation. For subsequent muzzle-flash, Lambda lighting, and
+five-map visual checks, see blackmesa-campaign-milestone-1.txt.
+
 Result and scope
 The tested gameplay paths work with RTX Remix enabled. This is a compatibility
 port with partial lighting content, not certification of a complete campaign.

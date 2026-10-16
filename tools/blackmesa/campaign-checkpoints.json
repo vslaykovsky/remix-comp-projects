@@ -1,0 +1,1035 @@
+{
+  "bm_c1a0b_02_hall": {
+    "name": "bm_c1a0b_02_hall",
+    "position": [
+      -1240.0,
+      1240.0,
+      -191.96875
+    ],
+    "angles": [
+      0.0,
+      90.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a0b_02_hall",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Laboratory hall toward reception",
+    "requested_position": [
+      -1240.0,
+      1240.0,
+      -191.96875
+    ],
+    "requested_angles": [
+      0.0,
+      90.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a0b_03_service_entry": {
+    "name": "bm_c1a0b_03_service_entry",
+    "position": [
+      -1328.0,
+      1630.0,
+      -159.96875
+    ],
+    "angles": [
+      0.0,
+      -90.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a0b_03_service_entry",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Service corridor reverse view, clear of doorway",
+    "requested_position": [
+      -1328.0,
+      1630.0,
+      -191.96875
+    ],
+    "requested_angles": [
+      0.0,
+      270.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a0b_01_scientist": {
+    "name": "bm_c1a0b_01_scientist",
+    "position": [
+      -1355.886963,
+      943.542847,
+      -191.96875
+    ],
+    "angles": [
+      9.832764,
+      -165.168457,
+      0
+    ],
+    "save": "codex_m1_bm_c1a0b_01",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Existing laboratory lighting control"
+  },
+  "bm_c1a0b_04_waiting_area": {
+    "name": "bm_c1a0b_04_waiting_area",
+    "position": [
+      -2584.0,
+      2640.0,
+      -191.96875
+    ],
+    "angles": [
+      0.0,
+      90.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a0b_04_waiting_area",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Waiting area near scientist nodes",
+    "requested_position": [
+      -2584.0,
+      2640.0,
+      -240.0
+    ],
+    "requested_angles": [
+      0.0,
+      90.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a0b_05_lower_hall": {
+    "name": "bm_c1a0b_05_lower_hall",
+    "position": [
+      -3700.0,
+      1207.0,
+      -575.96875
+    ],
+    "angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a0b_05_lower_hall",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Lower laboratory passage",
+    "requested_position": [
+      -3700.0,
+      1207.0,
+      -620.0
+    ],
+    "requested_angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a0b_06_deep_laboratory": {
+    "name": "bm_c1a0b_06_deep_laboratory",
+    "position": [
+      -9644.0,
+      1260.0,
+      -628.116882
+    ],
+    "angles": [
+      0.0,
+      -48.004761,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a0b_06_deep_laboratory",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Deeper laboratory section from an alternate map start",
+    "requested_position": [
+      -9644.0,
+      1260.0,
+      -670.0
+    ],
+    "requested_angles": [
+      0.0,
+      312.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a0b_07_pistol_flash": {
+    "name": "bm_c1a0b_07_pistol_flash",
+    "position": [
+      -1240,
+      1240,
+      -191.96875
+    ],
+    "angles": [
+      0,
+      90,
+      0
+    ],
+    "save": "codex_m1_muzzle_prefire",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": true,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "pose_verified": true,
+    "note": "Replay from prefire save at host_timescale 0.02, then +attack; transient frame varies"
+  },
+  "bm_c1a1a_01_destroyed_chamber": {
+    "name": "bm_c1a1a_01_destroyed_chamber",
+    "position": [
+      1326.0,
+      671.0,
+      -507.96875
+    ],
+    "angles": [
+      0.0,
+      -90.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a1a_01_destroyed_chamber",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Destroyed test chamber entrance",
+    "requested_position": [
+      1326.0,
+      671.0,
+      -540.0
+    ],
+    "requested_angles": [
+      0.0,
+      270.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a1a_02_chamber_side": {
+    "name": "bm_c1a1a_02_chamber_side",
+    "position": [
+      524.0,
+      842.0,
+      -447.96875
+    ],
+    "angles": [
+      4.998779,
+      0.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a1a_02_chamber_side",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Side of destroyed chamber",
+    "requested_position": [
+      524.0,
+      842.0,
+      -470.0
+    ],
+    "requested_angles": [
+      5.0,
+      0.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a1a_03_upper_passage": {
+    "name": "bm_c1a1a_03_upper_passage",
+    "position": [
+      2560.0,
+      2285.0,
+      -63.96875
+    ],
+    "angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a1a_03_upper_passage",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Upper passage near alternate map start",
+    "requested_position": [
+      2560.0,
+      2285.0,
+      -90.0
+    ],
+    "requested_angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a1a_04_stair_landing": {
+    "name": "bm_c1a1a_04_stair_landing",
+    "position": [
+      976.0,
+      1810.0,
+      -223.96875
+    ],
+    "angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a1a_04_stair_landing",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Intermediate-height corridor landing",
+    "requested_position": [
+      976.0,
+      1810.0,
+      -270.0
+    ],
+    "requested_angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a1a_05_exit_hall": {
+    "name": "bm_c1a1a_05_exit_hall",
+    "position": [
+      3200.0,
+      680.0,
+      -63.96875
+    ],
+    "angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a1a_05_exit_hall",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Upper exit hall",
+    "requested_position": [
+      3200.0,
+      680.0,
+      -100.0
+    ],
+    "requested_angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c1a1a_06_chamber_reverse": {
+    "name": "bm_c1a1a_06_chamber_reverse",
+    "position": [
+      752.0,
+      267.0,
+      -447.96875
+    ],
+    "angles": [
+      0.0,
+      180.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c1a1a_06_chamber_reverse",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Reverse view near alternate chamber spawn",
+    "requested_position": [
+      752.0,
+      267.0,
+      -480.0
+    ],
+    "requested_angles": [
+      0.0,
+      180.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c2a5a_01_entrance": {
+    "name": "bm_c2a5a_01_entrance",
+    "position": [
+      1312.0,
+      8000.0,
+      1472.03125
+    ],
+    "angles": [
+      0.0,
+      -90.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c2a5a_01_entrance",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Surface Tension entrance outlook",
+    "requested_position": [
+      1312.0,
+      8000.0,
+      1432.0
+    ],
+    "requested_angles": [
+      0.0,
+      270.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c2a5a_02_road": {
+    "name": "bm_c2a5a_02_road",
+    "position": [
+      1666.158325,
+      6562.828613,
+      1492.430054
+    ],
+    "angles": [
+      -0.839418,
+      -89.852135,
+      0.0
+    ],
+    "save": "codex_m1_bm_c2a5a_02_road",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Road between rocky embankments",
+    "requested_position": [
+      1664.0,
+      6560.0,
+      1432.0
+    ],
+    "requested_angles": [
+      0.0,
+      270.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c2a5a_03_rock_arch": {
+    "name": "bm_c2a5a_03_rock_arch",
+    "position": [
+      1311.0,
+      5201.0,
+      1642.820679
+    ],
+    "angles": [
+      0.0,
+      -110.00061,
+      0.0
+    ],
+    "save": "codex_m1_bm_c2a5a_03_rock_arch",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Beyond the road, rock arch and approach",
+    "requested_position": [
+      1311.0,
+      5201.0,
+      1583.0
+    ],
+    "requested_angles": [
+      0.0,
+      250.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c2a5a_04_canyon_road": {
+    "name": "bm_c2a5a_04_canyon_road",
+    "position": [
+      -928.0,
+      4384.0,
+      1496.870605
+    ],
+    "angles": [
+      0.0,
+      -120.003662,
+      0.0
+    ],
+    "save": "codex_m1_bm_c2a5a_04_canyon_road",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Canyon approach overlooking dam",
+    "requested_position": [
+      -928.0,
+      4384.0,
+      1472.0
+    ],
+    "requested_angles": [
+      0.0,
+      240.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c2a5a_05_dam_platform": {
+    "name": "bm_c2a5a_05_dam_platform",
+    "position": [
+      -2816.0,
+      2752.0,
+      1344.03125
+    ],
+    "angles": [
+      0.0,
+      -60.001831,
+      0.0
+    ],
+    "save": "codex_m1_bm_c2a5a_05_dam_platform",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Lower platform near dam",
+    "requested_position": [
+      -2816.0,
+      2752.0,
+      1288.0
+    ],
+    "requested_angles": [
+      0.0,
+      300.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c2a5a_06_reservoir": {
+    "name": "bm_c2a5a_06_reservoir",
+    "position": [
+      -3320.0,
+      -855.0,
+      1344.03125
+    ],
+    "angles": [
+      4.998779,
+      180.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c2a5a_06_reservoir",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Dam walkway looking across reservoir",
+    "requested_position": [
+      -3320.0,
+      -855.0,
+      1310.0
+    ],
+    "requested_angles": [
+      5.0,
+      180.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c3a2a_01_entrance": {
+    "name": "bm_c3a2a_01_entrance",
+    "position": [
+      3848.0,
+      -2224.0,
+      64.03125
+    ],
+    "angles": [
+      0.0,
+      90.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c3a2a_01_entrance",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Lambda entrance corridor; relighting target",
+    "requested_position": [
+      3848.0,
+      -2224.0,
+      32.0
+    ],
+    "requested_angles": [
+      0.0,
+      90.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c3a2a_02_corridor_reverse": {
+    "name": "bm_c3a2a_02_corridor_reverse",
+    "position": [
+      3848.0,
+      -1830.0,
+      64.03125
+    ],
+    "angles": [
+      0.0,
+      -90.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c3a2a_02_corridor_reverse",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Reverse view of the entrance fixtures",
+    "requested_position": [
+      3848.0,
+      -1830.0,
+      20.0
+    ],
+    "requested_angles": [
+      0.0,
+      270.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c3a2a_03_loading_bay": {
+    "name": "bm_c3a2a_03_loading_bay",
+    "position": [
+      4016.0,
+      -1440.0,
+      64.03125
+    ],
+    "angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c3a2a_03_loading_bay",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Loading bay adjoining the relit entrance",
+    "requested_position": [
+      4016.0,
+      -1440.0,
+      32.0
+    ],
+    "requested_angles": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c3a2a_04_control_room": {
+    "name": "bm_c3a2a_04_control_room",
+    "position": [
+      4320.0,
+      -1100.0,
+      128.03125
+    ],
+    "angles": [
+      0.0,
+      90.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c3a2a_04_control_room",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Upper control-room approach",
+    "requested_position": [
+      4320.0,
+      -1100.0,
+      96.0
+    ],
+    "requested_angles": [
+      0.0,
+      90.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c3a2a_05_lower_arena": {
+    "name": "bm_c3a2a_05_lower_arena",
+    "position": [
+      4784.0,
+      -1900.0,
+      -2196.0
+    ],
+    "angles": [
+      0.0,
+      180.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c3a2a_05_lower_arena",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Lower Lambda arena",
+    "requested_position": [
+      4784.0,
+      -1900.0,
+      -2260.0
+    ],
+    "requested_angles": [
+      0.0,
+      180.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c3a2a_06_exit_passage": {
+    "name": "bm_c3a2a_06_exit_passage",
+    "position": [
+      4360.0,
+      768.0,
+      -2336.0
+    ],
+    "angles": [
+      0.0,
+      -90.0,
+      0.0
+    ],
+    "save": "codex_m1_bm_c3a2a_06_exit_passage",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Lower service area beyond cargo arena",
+    "requested_position": [
+      4360.0,
+      768.0,
+      -2400.0
+    ],
+    "requested_angles": [
+      0.0,
+      270.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c4a1a_01_saved_overlook": {
+    "name": "bm_c4a1a_01_saved_overlook",
+    "position": [
+      -6155.992676,
+      -46.286156,
+      9082.369141
+    ],
+    "angles": [
+      -0.598755,
+      87.868652,
+      0.0
+    ],
+    "save": "codex_m1_bm_c4a1a_01_saved_overlook",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Supplied Xen Intro Split checkpoint; original saved camera",
+    "requested_position": [
+      -6155.992676,
+      -46.286156,
+      9082.369141
+    ],
+    "requested_angles": [
+      -0.598755,
+      87.868652,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c4a1a_02_arrival": {
+    "name": "bm_c4a1a_02_arrival",
+    "position": [
+      -5215.0,
+      -1712.0,
+      8855.053711
+    ],
+    "angles": [
+      0.0,
+      67.5,
+      0.0
+    ],
+    "save": "codex_m1_bm_c4a1a_02_arrival",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Xen arrival island",
+    "requested_position": [
+      -5215.0,
+      -1712.0,
+      8810.0
+    ],
+    "requested_angles": [
+      0.0,
+      67.5,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c4a1a_03_cave_approach": {
+    "name": "bm_c4a1a_03_cave_approach",
+    "position": [
+      -1830.41687,
+      -1494.230347,
+      7872.441895
+    ],
+    "angles": [
+      0.0,
+      59.996338,
+      0.0
+    ],
+    "save": "codex_m1_bm_c4a1a_03_cave_approach",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Cave approach near first houndeye",
+    "requested_position": [
+      -1800.0,
+      -1493.0,
+      7870.0
+    ],
+    "requested_angles": [
+      0.0,
+      60.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c4a1a_04_alien_grove": {
+    "name": "bm_c4a1a_04_alien_grove",
+    "position": [
+      -730.0,
+      2128.0,
+      7307.05957
+    ],
+    "angles": [
+      0.0,
+      69.99939,
+      0.0
+    ],
+    "save": "codex_m1_bm_c4a1a_04_alien_grove",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Bioluminescent grove near houndeye encounter",
+    "requested_position": [
+      -730.0,
+      2128.0,
+      7310.0
+    ],
+    "requested_angles": [
+      0.0,
+      70.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c4a1a_05_pool_path": {
+    "name": "bm_c4a1a_05_pool_path",
+    "position": [
+      613.942505,
+      1285.262939,
+      7331.576172
+    ],
+    "angles": [
+      -2.914929,
+      69.99939,
+      -4.379486
+    ],
+    "save": "codex_m1_bm_c4a1a_05_pool_path",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Mid-map path and vegetation",
+    "requested_position": [
+      700.0,
+      1296.0,
+      7300.0
+    ],
+    "requested_angles": [
+      0.0,
+      70.0,
+      0.0
+    ],
+    "pose_verified": true
+  },
+  "bm_c4a1a_06_exit_cavern": {
+    "name": "bm_c4a1a_06_exit_cavern",
+    "position": [
+      3646.992676,
+      7795.723633,
+      7160.591309
+    ],
+    "angles": [
+      0.045655,
+      60.015961,
+      0.0
+    ],
+    "save": "codex_m1_bm_c4a1a_06_exit_cavern",
+    "fov_desired": 90,
+    "flashlight": false,
+    "hud": false,
+    "viewmodel": false,
+    "game_resolution": [
+      1280,
+      720
+    ],
+    "note": "Cavern before the next-map transition",
+    "requested_position": [
+      3650.0,
+      7800.0,
+      7120.0
+    ],
+    "requested_angles": [
+      0.0,
+      60.0,
+      0.0
+    ],
+    "pose_verified": true
+  }
+}

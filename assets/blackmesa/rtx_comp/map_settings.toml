@@ -295,6 +295,28 @@
 
 [LIGHTS]
 
+    # Lambda entrance: paired wall fixtures, with separate floor and ceiling light.
+    # Positions follow the original fixtures; radiance is calibrated in Remix.
+    bm_c3a2a = [
+        { points = [{ position = [3698, -2256, 72], radiance = [0.87, 0.89, 1.00], scalar = 300.0, radius = 2.5, direction = [0, 0, -1], degrees = 80.0, softness = 0.35, exponent = 0.0 }] },
+        { points = [{ position = [3698, -2256, 112], radiance = [0.87, 0.89, 1.00], scalar = 1000.0, radius = 2.5, direction = [0.258819, 0, 0.965926], degrees = 75.0, softness = 0.4, exponent = 0.0 }] },
+        { points = [{ position = [3998, -2256, 72], radiance = [0.87, 0.89, 1.00], scalar = 300.0, radius = 2.5, direction = [0, 0, -1], degrees = 80.0, softness = 0.35, exponent = 0.0 }] },
+        { points = [{ position = [3998, -2256, 112], radiance = [0.87, 0.89, 1.00], scalar = 1000.0, radius = 2.5, direction = [-0.258819, 0, 0.965926], degrees = 75.0, softness = 0.4, exponent = 0.0 }] },
+        { points = [{ position = [3698, -2128, 72], radiance = [0.87, 0.89, 1.00], scalar = 300.0, radius = 2.5, direction = [0, 0, -1], degrees = 80.0, softness = 0.35, exponent = 0.0 }] },
+        { points = [{ position = [3698, -2128, 112], radiance = [0.87, 0.89, 1.00], scalar = 1000.0, radius = 2.5, direction = [0.258819, 0, 0.965926], degrees = 75.0, softness = 0.4, exponent = 0.0 }] },
+        { points = [{ position = [3998, -2128, 72], radiance = [0.87, 0.89, 1.00], scalar = 300.0, radius = 2.5, direction = [0, 0, -1], degrees = 80.0, softness = 0.35, exponent = 0.0 }] },
+        { points = [{ position = [3998, -2128, 112], radiance = [0.87, 0.89, 1.00], scalar = 1000.0, radius = 2.5, direction = [-0.258819, 0, 0.965926], degrees = 75.0, softness = 0.4, exponent = 0.0 }] },
+        { points = [{ position = [3698, -1984, 72], radiance = [0.87, 0.89, 1.00], scalar = 300.0, radius = 2.5, direction = [0, 0, -1], degrees = 80.0, softness = 0.35, exponent = 0.0 }] },
+        { points = [{ position = [3698, -1984, 112], radiance = [0.87, 0.89, 1.00], scalar = 1000.0, radius = 2.5, direction = [0.258819, 0, 0.965926], degrees = 75.0, softness = 0.4, exponent = 0.0 }] },
+        { points = [{ position = [3998, -1984, 72], radiance = [0.87, 0.89, 1.00], scalar = 300.0, radius = 2.5, direction = [0, 0, -1], degrees = 80.0, softness = 0.35, exponent = 0.0 }] },
+        { points = [{ position = [3998, -1984, 112], radiance = [0.87, 0.89, 1.00], scalar = 1000.0, radius = 2.5, direction = [-0.258819, 0, 0.965926], degrees = 75.0, softness = 0.4, exponent = 0.0 }] },
+        { points = [{ position = [3698, -1856, 72], radiance = [0.87, 0.89, 1.00], scalar = 300.0, radius = 2.5, direction = [0, 0, -1], degrees = 80.0, softness = 0.35, exponent = 0.0 }] },
+        { points = [{ position = [3698, -1856, 112], radiance = [0.87, 0.89, 1.00], scalar = 1000.0, radius = 2.5, direction = [0.258819, 0, 0.965926], degrees = 75.0, softness = 0.4, exponent = 0.0 }] },
+        { points = [{ position = [3998, -1856, 72], radiance = [0.87, 0.89, 1.00], scalar = 300.0, radius = 2.5, direction = [0, 0, -1], degrees = 80.0, softness = 0.35, exponent = 0.0 }] },
+        { points = [{ position = [3998, -1856, 112], radiance = [0.87, 0.89, 1.00], scalar = 1000.0, radius = 2.5, direction = [-0.258819, 0, 0.965926], degrees = 75.0, softness = 0.4, exponent = 0.0 }] },
+    ]
+
+
     bm_c0a0b = [
 
         # welding

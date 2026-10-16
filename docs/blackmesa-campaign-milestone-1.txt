@@ -1,0 +1,131 @@
+Black Mesa campaign milestone 1 â€” 2026-10-16
+
+Result
+The opaque pistol muzzle-flash card is corrected in the tested scene. The
+Lambda entrance corridor now has authored path-traced lighting. A visual survey
+covers six camera locations on each of five maps, plus a pistol comparison.
+This is not full-campaign lighting support or an end-to-end playthrough.
+
+Changes
+1. The animated muzzle-flash Spritecard materials now expose texture-times-
+   vertex alpha to Remix and use SRCALPHA/ONE additive blending. Source normally
+   performs ADDSELF premultiplication inside its pixel shader; forwarding its
+   ONE/INVSRCALPHA state without that shader operation left an opaque card as
+   the effect faded. The compatibility translation retains the vertex shader
+   so atlas UVs and particle orientation continue to be captured correctly.
+   The observed vistasmokev1 Spritecard also receives texture-times-vertex alpha.
+   All modified render/texture-stage states use the existing per-pass restore.
+   This is an approximation of the additive effect, not a full implementation
+   of Source's dual-sequence, depth-fade, and frame-interpolation pixel shaders.
+2. bm_c3a2a gets 16 shaped lights at eight entrance wall fixtures. Separate
+   downward and upward lobes illuminate the walkway and curved ceiling. Other
+   maps and existing light entries are unchanged. The fixture strips still need
+   an emissive-material pass for closer visual fidelity.
+3. Optional -rtx-material-diagnostics writes bounded source/prepared particle
+   state information to rtx_comp/logs/particle-passes.log. It is disabled by
+   default and does not itself change rendering.
+
+Configuration and validation
+- Steam public build 19042901; RTX Remix e2f8119-845; POC lighting pack 1.0.2.
+- VS2022 MSVC v143, Windows SDK 10.0.26100.0, Release Win32 build passed.
+  Two existing MSB8005 warnings concern header-only dependency projects.
+- Offline verifier passed all eight module fingerprints and 27 hook checks.
+- The resulting ASI was installed and all five sampled maps loaded/rendered.
+- Pistol test retained the bright initial flash and showed translucent fading
+  smoke without the previous solid polygon. Evidence includes before/after
+  decay and the corrected initial flash. Other weapons were not surveyed.
+- Lambda was inspected facing both directions and from four adjoining/lower
+  views. The added corridor illumination did not visibly wash out those areas.
+- The user's original saves/configuration were restored; normal windowed RTX
+  play was reopened with raw input enabled and without diagnostic/input flags.
+
+Capture method and limits
+The local evidence folder contains 93 original JPEGs: 30 static-view triplets
+and one pistol triplet. Sorting by filename groups the three variants:
+  <map>_<location>_01_rtx_before.jpg
+  <map>_<location>_02_rtx_after.jpg
+  <map>_<location>_03_vanilla.jpg
+
+Before uses the published build-19042901 port, prior to this milestone's two
+rendering changes. After uses the final milestone ASI and Lambda light entry.
+Vanilla disables both local Remix/ASI loader DLLs and uses the game's native
+renderer (including its bundled DXVK); no compatibility ASI was loaded.
+
+The registry is tools/blackmesa/campaign-checkpoints.json. Each position is an
+eye position returned by getpos. For a standing, noclip camera, subtract 64
+from Z before using setpos_exact, then apply setang_exact. fov_desired was 90,
+HUD/flashlight were off, and the viewmodel was off except in the pistol test.
+All 30 static views matched recorded XYZ to the printed engine precision;
+maximum angle difference was 0.005493 degrees due to angle quantization.
+Pistol starting pose is matched, but recoil, particle phase and shot timing
+are not frame-synchronized. Its three pictures are qualitative effect checks.
+
+Checkpoints and the game's -hijack +exec interface were used to replay poses;
+noclip, pause, and some god/notarget use isolated camera checks from movement
+and combat. Later views within a map used teleports. NPCs, scripted state,
+animation, particles, and exposure history can differ between variants.
+This does not certify puzzles, transitions, enemy encounters, or completion.
+The first Xen checkpoint came from the user-supplied save collection.
+
+The game ran at 1280x720 windowed. Computer Use delivered 642x385 JPEG captures
+including the title bar; files preserve those pixels, with no enhancement,
+recoloring, cropping or resizing. These are not full-resolution pixel-diff
+benchmarks. Some location labels are survey identifiers rather than room names.
+Game saves, extracted game materials/maps, raw logs, and the POC asset pack are
+not distributed in this repository. The camera registry alone cannot restore
+an identical scripted scene; use corresponding local saves where available.
+
+Findings by map
+bm_c1a0b â€” Laboratory
+  Existing POC lighting makes the human laboratory readable. RTX shifts color
+  balance and misses some monitor/fixture glow. The embedded Xen vignette has
+  severely overbright opaque particle cards; the narrow muzzle fix does not
+  cover those materials. Priorities: classify the remaining effect materials
+  and preserve their alpha/emission behavior, then tune material roughness and
+  monitor/fixture emission against vanilla.
+
+bm_c1a1a â€” Post-disaster laboratory
+  The wrecked chamber loses much of vanilla's warm fire/emergency illumination.
+  In contrast, several surrounding corridors are too bright and neutral in RTX
+  compared with vanilla's dim red emergency lighting. Some white particle cards
+  remain. Priorities: event-aware light states, fire/emergency emitters, and the
+  relevant particle shaders. A global exposure increase would not solve this.
+
+bm_c2a5a â€” Surface Tension
+  Geometry and the playable foreground render, but RTX has a strong blue cast,
+  weak warm sunlight, conspicuous sky boundaries, and missing distant scenery
+  relative to vanilla. The entrance is also underlit. Priorities: diagnose the
+  sky/3D-sky capture and culling paths, set a correct sun/environment, then check
+  water, vegetation alpha and exterior material response. Missing distant
+  scenery is an observed symptom, not a proven single culling defect.
+
+bm_c3a2a â€” Lambda Complex
+  The entrance was nearly black with clearly visible unlit fixtures. The new
+  shaped lights make its walkway and wall arches legible. Four nearby/lower
+  samples retain their existing lighting; deeper areas still need comparison
+  and authoring. Priorities: emissive fixture surfaces, localized lighting in
+  remaining rooms, and tests of doors, lifts and light-state transitions.
+
+bm_c4a1a â€” Early Xen
+  Five views are almost black in RTX. Vanilla shows a bright purple/cyan sky,
+  colored environmental illumination, vegetation and readable paths. The sixth
+  view's red hanging organism illuminates nearby rock, showing that some
+  emissive effects work. Priorities: restore sky/environment capture, verify
+  visibility/culling, translate alien emissive materials, and author biome
+  lighting. These captures do not establish that all dark geometry is absent.
+
+Next campaign work, in order
+1. Fix and validate Surface Tension's sun/sky and Xen's sky/environment at the
+   existing six viewpoints each, before compensating with local point lights.
+2. Extend particle translation from observed materials, including the lab Xen
+   vignette and post-disaster effects; test every weapon's flash/smoke separately.
+3. Implement state-aware emergency/fire lighting in bm_c1a1a and extend the
+   Lambda fixture pass room by room. Keep matched vanilla references.
+4. Expand the checkpoint matrix to all campaign maps and critical events, then
+   run continuous chapter routes including transitions, saves, combat and
+   scripted puzzles. Only then assess complete-campaign playability and tune
+   performance with repeatable frame-time/VRAM measurements.
+
+Shader reference used for the translation
+Valve Source SDK 2013 spritecard.cpp and spritecard_ps2x.fxc:
+https://github.com/ValveSoftware/source-sdk-2013/tree/master/src/materialsystem/stdshaders

@@ -59,6 +59,52 @@ namespace mods::blackmesa
 		return found;
 	}
 
+	// Opt-in, bounded diagnostics for particle passes. No render state is changed.
+	static void log_particle_pass(IDirect3DDevice9* dev, const prim_fvf_context& ctx,
+		const uint64_t format, const UINT stride, const char* phase)
+	{
+		static const bool enabled = shared::common::flags::has_flag("rtx-material-diagnostics");
+		if (!enabled || !(ctx.info.material_name.contains("muzzle")
+			|| ctx.info.shader_name.starts_with("Sprite")
+			|| ctx.info.material_name.starts_with("particle/"))) return;
+		static std::unordered_set<std::string> seen;
+		const auto key = std::string(phase) + ":" + std::string(ctx.info.material_name)
+			+ ":" + std::to_string(format);
+		if (seen.size() >= 256 || !seen.insert(key).second) return;
+		const auto directory = std::filesystem::path(shared::globals::root_path) / "rtx_comp" / "logs";
+		std::error_code error;
+		std::filesystem::create_directories(directory, error);
+		std::ofstream log(directory / "particle-passes.log", std::ios::app);
+		log << phase << " material=" << ctx.info.material_name << " shader=" << ctx.info.shader_name
+			<< " format=" << std::hex << format << std::dec << " stride=" << stride;
+		for (const auto state : {D3DRS_ALPHABLENDENABLE, D3DRS_SRCBLEND, D3DRS_DESTBLEND,
+			D3DRS_BLENDOP, D3DRS_ALPHATESTENABLE, D3DRS_ALPHAFUNC, D3DRS_ALPHAREF, D3DRS_ZWRITEENABLE})
+		{
+			DWORD value = 0;
+			dev->GetRenderState(state, &value);
+			log << " rs" << state << '=' << value;
+		}
+		for (const auto state : {D3DTSS_COLOROP, D3DTSS_COLORARG1, D3DTSS_COLORARG2,
+			D3DTSS_ALPHAOP, D3DTSS_ALPHAARG1, D3DTSS_ALPHAARG2, D3DTSS_TEXCOORDINDEX})
+		{
+			DWORD value = 0;
+			dev->GetTextureStageState(0, state, &value);
+			log << " tss" << state << '=' << value;
+		}
+		IDirect3DVertexDeclaration9* declaration = nullptr;
+		if (SUCCEEDED(dev->GetVertexDeclaration(&declaration)) && declaration)
+		{
+			D3DVERTEXELEMENT9 elements[MAX_FVF_DECL_SIZE]{};
+			UINT count = MAX_FVF_DECL_SIZE;
+			if (SUCCEEDED(declaration->GetDeclaration(elements, &count)))
+				for (UINT i = 0; i < count; ++i)
+					log << " decl=" << elements[i].Offset << ',' << int(elements[i].Type)
+						<< ',' << int(elements[i].Usage) << ',' << int(elements[i].UsageIndex);
+			declaration->Release();
+		}
+		log << '\n';
+	}
+
 	void cmeshdx8_renderpass_pre_draw(game::CMeshDX8* mesh, [[maybe_unused]] /*CPrimList**/ std::uint32_t primlist)
 	{
 		const auto dev = game::get_d3d_device();
@@ -78,6 +124,7 @@ namespace mods::blackmesa
 
 		if (ctx.get_info_for_pass(shaderapi))
 		{
+			log_particle_pass(dev, ctx, mesh->m_VertexFormat, stride, "source");
 			{
 				if (mesh->m_VertexFormat == 0x480133 || mesh->m_VertexFormat == 0x80133) 
 				{
@@ -863,6 +910,30 @@ namespace mods::blackmesa
 
 		if (im->m_debug_disable_rendering[63]) ctx.modifiers.do_not_render = true;
 #endif
+		// Spritecard's pixel shader multiplies texture opacity by vertex opacity.
+		// Remix needs the equivalent fixed-function state to retain particle fading.
+		// Keep the vertex shader: it expands and rotates the particle atlas cards.
+		if (ctx.info.shader_name == "Spritecard"
+			&& (ctx.info.material_name.starts_with("particle/muzzleflash_animated_")
+				|| ctx.info.material_name == "particle/vistasmokev1/vistasmokev1"))
+		{
+			ctx.save_tss(dev, D3DTSS_ALPHAOP);
+			ctx.save_tss(dev, D3DTSS_ALPHAARG1);
+			ctx.save_tss(dev, D3DTSS_ALPHAARG2);
+			dev->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);
+			dev->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);
+			dev->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_DIFFUSE);
+			if (ctx.info.material_name.starts_with("particle/muzzleflash_animated_"))
+			{
+				// ADDSELF premultiplication is done in Source's pixel shader. Use
+				// ordinary additive blending for its unpremultiplied texture in Remix.
+				ctx.save_rs(dev, D3DRS_SRCBLEND);
+				ctx.save_rs(dev, D3DRS_DESTBLEND);
+				dev->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);
+				dev->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_ONE);
+			}
+		}
+		log_particle_pass(dev, ctx, mesh->m_VertexFormat, stride, "prepared");
 	}
 
 
