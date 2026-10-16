@@ -1,0 +1,90 @@
+Black Mesa RTX compatibility port: Steam public build 19042901
+
+Scope
+This fork updates xoxor4d's Black Mesa compatibility plugin from the original
+March 2020 game release to the installed Windows public Steam build 19042901.
+It is based on upstream commit 006a02ec003358c3f063b197293023070127f5d5.
+The newer public-beta branch is a different binary target and is not supported.
+The plugin refuses unknown or modified game DLLs instead of patching their code.
+
+This is a compatibility port, not a complete RTX campaign remaster. The separate
+Black Mesa Remixed POC content pack covers the tram and parts of the laboratory.
+Most later maps still need authored lights, materials, and effects work.
+
+Implementation
+- Rebased the engine, client, shader, renderer, and studio renderer addresses.
+- Updated IShaderAPIDX8 vtable slots and RenderView/view-ID assembly stubs.
+- Identified the player by network class name instead of an unstable numeric ID.
+- Resolved eye angles through the current network property.
+- Read the current flashlight state at client offset 0x13D5. The network property
+  m_bFlashlightEnabled describes availability, not whether the light is switched on.
+- Removed a brush backface patch whose original target logic no longer exists.
+- Added SHA256 checks for eight DLLs and byte checks for 26 hook sites plus the
+  flashlight field instruction before installing any compatibility hooks.
+- Added optional missing-scan-code repair for desktop automation.
+
+Build
+Use Visual Studio 2022 Build Tools, the MSVC v143 x86/x64 tools, and Windows SDK
+10.0.26100.0. Initialize the repository submodules, then run from the repository:
+
+  tools\premake5.exe vs2022
+  msbuild build\blackmesa-rtx.vcxproj /m /p:Configuration=Release /p:Platform=Win32 /p:WindowsTargetPlatformVersion=10.0.26100.0
+
+Output: build\bin\Release\a_blackmesa-rtx.asi
+The SDK override avoids selecting an installed SDK whose libraries are incomplete.
+Upstream header-only bridge_api and toml11 projects can emit MSB8005 warnings;
+these do not prevent the Black Mesa Release build from completing.
+
+Verify your game without changing it
+Python 3, standard library only:
+
+  python tools\blackmesa\verify_build.py "C:\Path\To\Black Mesa"
+
+Exit 0 means all expected hashes and instructions match. Exit 1 means the build is
+unsupported, unreadable, or failed a check. --json report.json writes the details.
+No proprietary game binaries are included in this fork.
+
+Install
+1. Close Black Mesa. Back up the existing mod files, bms\cfg, and bms\save.
+2. Keep the original public-build game DLLs. Do not downgrade to black-mesa-1-0.
+3. Install the upstream compatibility assets, an x86 Remix runtime, and the ASI
+   loader as described in assets\blackmesa\_README.txt. The tested runtime was
+   e2f8119-845 from the original Black Mesa release bundle.
+4. Copy a_blackmesa-rtx.asi into the game's bin directory, replacing the old ASI.
+5. Copy assets\blackmesa contents beside bms.exe. Install the separate author's
+   blackmesa-remix-poc-1.0.2.7z content pack for authored opening-map lighting.
+6. Use run-bms-rtx-windowed.bat for 1280x720 windowed play. It enables raw mouse
+   input. Start from the game folder with Steam running.
+
+To undo this port, close the game and restore the backed-up ASI and launchers.
+Removing the complete Remix installation also requires restoring its runtime,
+loader, configuration, and content files; do not delete shared files blindly.
+Preserve any newer saves before restoring old backups.
+
+Desktop automation
+run-bms-rtx-computer-use.bat adds -rtx-computer-use and sets m_rawinput 0.
+The optional keyboard shim fills absent scan-code bits in WM_KEYDOWN/WM_KEYUP and
+their system-key variants, using the current Windows keyboard layout. Existing
+physical scan codes and VK_PACKET Unicode events remain unchanged.
+The mouse setting avoids treating absolute desktop mouse events as raw game
+movement. The available Computer Use interface still lacks explicit held-key
+duration and relative mouse movement, so continuous FPS control is limited.
+The regular launcher returns to raw mouse input 1 and does not enable the shim.
+
+The flashlight requires the HEV suit. At the tram exit, F can be bound correctly
+to impulse 100 and still do nothing until the suit is obtained.
+
+Diagnostics
+rtx_comp\logs\compatibility.log records build acceptance/rejection, loaded maps,
+initial rendered frames, and flashlight transitions. There is no per-key logging.
+The optional -rtx-smoke-test flag enables a one-shot developer test after a local
+player exists: it grants a suit, toggles the light, moves forward briefly, logs
+positions, and resets sv_cheats to 0. Use only a disposable session. Normal
+launchers do not enable this flag.
+
+Upstream and content
+https://github.com/xoxor4d/remix-comp-projects#black-mesa
+https://github.com/xoxor4d/remix-comp-projects/releases/tag/1.0-BlackMesa
+https://www.moddb.com/mods/black-mesa-remixed-poc-inbound/downloads/black-mesa-inbound-ride-and-lab-rtx-remix-mod
+
+Validation results are recorded separately in blackmesa-validation-2026-10-16.txt.

@@ -373,7 +373,8 @@ namespace mods::blackmesa::game
 
 	struct IShaderAPIDX8_vtbl
 	{
-		char pad[0x560];
+		// Build 19042901 adds three methods before this part of IShaderAPIDX8.
+		char pad[0x56C];
 		IDirect3DBaseTexture9* (__fastcall* GetD3DTexture)(void* shaderapi_ptr, void* ecx, int handle);
 		void* pad96;
 		void* pad97;
@@ -387,8 +388,9 @@ namespace mods::blackmesa::game
 		IMaterialInternal* (__fastcall* GetBoundMaterial)(void* shaderapi_ptr, void* ecx);
 	};
 
-	STATIC_ASSERT_OFFSET(IShaderAPIDX8_vtbl, GetD3DTexture, 0x560);
-	STATIC_ASSERT_OFFSET(IShaderAPIDX8_vtbl, GetBufferedState, 0x574);
+	STATIC_ASSERT_OFFSET(IShaderAPIDX8_vtbl, GetD3DTexture, 0x56C);
+	STATIC_ASSERT_OFFSET(IShaderAPIDX8_vtbl, GetBufferedState, 0x580);
+	STATIC_ASSERT_OFFSET(IShaderAPIDX8_vtbl, GetBoundMaterial, 0x594);
 
 	struct IShaderAPIDX8
 	{

@@ -26,29 +26,32 @@ namespace mods::blackmesa::game
 	extern void cvar_uncheat_and_set_float(const char* name, const float val);
 
 	extern void init_game_addresses();
+	// Fail before installing hooks if Steam updates any ABI-dependent module.
+	bool validate_supported_build();
+	void compatibility_log(const std::string& message);
 
-	inline CRender* get_engine_renderer() { return reinterpret_cast<CRender*>(ENGINE_BASE + 0x8E27C8); }
-	inline IDirect3DDevice9* get_d3d_device() { return reinterpret_cast<IDirect3DDevice9*>(*(DWORD*)(RENDERER_BASE + 0xED788)); }
-	inline IShaderAPIDX8* get_shaderapi() { return reinterpret_cast<IShaderAPIDX8*>(*(DWORD*)(RENDERER_BASE + 0xE097C)); }
-	inline worldbrushdata_t* get_hoststate_worldbrush_data() { return reinterpret_cast<CCommonHostState*>(ENGINE_BASE + 0x974BBC)->worldbrush; }
-	inline CGlobalVarsBase* get_global_vars() { return reinterpret_cast<CGlobalVarsBase*>(*(DWORD*)(CLIENT_BASE + 0x530A00)); }
+	inline CRender* get_engine_renderer() { return reinterpret_cast<CRender*>(ENGINE_BASE + 0x8E49D0); }
+	inline IDirect3DDevice9* get_d3d_device() { return reinterpret_cast<IDirect3DDevice9*>(*(DWORD*)(RENDERER_BASE + 0xEE808)); }
+	inline IShaderAPIDX8* get_shaderapi() { return reinterpret_cast<IShaderAPIDX8*>(*(DWORD*)(RENDERER_BASE + 0xE197C)); }
+	inline worldbrushdata_t* get_hoststate_worldbrush_data() { return reinterpret_cast<CCommonHostState*>(ENGINE_BASE + 0x976DBC)->worldbrush; }
+	inline CGlobalVarsBase* get_global_vars() { return reinterpret_cast<CGlobalVarsBase*>(*(DWORD*)(CLIENT_BASE + 0x553A04)); }
 	inline CCvar* get_icvar() { return reinterpret_cast<CCvar*>((VSTDLIB_BASE + 0x321F0)); }
 
-	inline Vector* get_current_view_origin() { return reinterpret_cast<Vector*>(ENGINE_BASE + 0x4E0CEC); }
-	inline Vector* get_current_view_forward() { return reinterpret_cast<Vector*>(ENGINE_BASE + 0x3F3164); }
-	inline Vector* get_current_view_right() { return reinterpret_cast<Vector*>(ENGINE_BASE + 0x3F3170); }
-	inline Vector* get_current_view_up() { return reinterpret_cast<Vector*>(ENGINE_BASE + 0x3F317C); }
+	inline Vector* get_current_view_origin() { return reinterpret_cast<Vector*>(ENGINE_BASE + 0x4E2E8C); }
+	inline Vector* get_current_view_forward() { return reinterpret_cast<Vector*>(ENGINE_BASE + 0x3F5284); }
+	inline Vector* get_current_view_right() { return reinterpret_cast<Vector*>(ENGINE_BASE + 0x3F5290); }
+	inline Vector* get_current_view_up() { return reinterpret_cast<Vector*>(ENGINE_BASE + 0x3F529C); }
 
-	inline view_id* get_current_view_id() { return reinterpret_cast<view_id*>(CLIENT_BASE + 0x539A54); }
+	inline view_id* get_current_view_id() { return reinterpret_cast<view_id*>(CLIENT_BASE + 0x55CADC); }
 	extern view_id saved_view_id;
 
 	// CM_PointLeafnum
-	inline int get_leaf_from_position(const Vector& pos) { return shared::utils::hook::call<int(__cdecl)(const float*)>(ENGINE_BASE + 0x185D00)(&pos.x); }
+	inline int get_leaf_from_position(const Vector& pos) { return shared::utils::hook::call<int(__cdecl)(const float*)>(ENGINE_BASE + 0x1870B0)(&pos.x); }
 
 	inline bool is_paused()
 	{
 		// CEngineTool::IsGamePaused
-		return shared::utils::hook::call<bool(__cdecl)()>(ENGINE_BASE + 0xA6CC0)();
+		return shared::utils::hook::call<bool(__cdecl)()>(ENGINE_BASE + 0xA7060)();
 		
 		//// 4A9C38 BaseLocalClient
 		//const auto blc = reinterpret_cast<void*>(ENGINE_BASE + 0x4A9C38);

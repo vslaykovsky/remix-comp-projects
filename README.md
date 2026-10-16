@@ -16,7 +16,7 @@ If you want to support my work, consider buying me some [coffee](https://ko-fi.c
 <div align="center" markdown="1"> 
 
 ### Table of Contents
-__[Black Mesa 1.0 (Steam)](#black-mesa)__  
+__[Black Mesa (Steam public build 19042901)](#black-mesa)__
 __[Bioshock 1 (GOG)](#bioshock-1-gog)__  
 __[SWAT 4 Gold (GOG)](#swat-4---gold-gog)__  
 __[Fear 1 Platinum (GOG)](#fear-1-platinum-gog)__  
@@ -43,6 +43,11 @@ _____
 
 ### Black Mesa
 ![img](.github/img/blackmesa.jpg)
+
+This fork ports the compatibility plugin to **Windows Steam public build 19042901**.
+It checks the game DLL fingerprints and hook instructions before applying patches.
+Other builds, including the newer public beta and the original 1.0 release, are not supported by this binary.
+See [build, installation, and validation notes](docs/blackmesa-build19042901.txt).
 
 #### This compatibilty mod was used for on an entry in the RTX Remix Modding Competition. 
 #### As such, a proper remix mod with limited scope was created an can be found over at [ModDB](https://www.moddb.com/mods/black-mesa-remixed-poc-inbound/downloads/black-mesa-inbound-ride-and-lab-rtx-remix-mod)

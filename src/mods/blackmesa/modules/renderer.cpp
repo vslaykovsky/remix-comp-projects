@@ -238,7 +238,7 @@ namespace mods::blackmesa
 				dev->SetRenderState(D3DRS_FOGENABLE, FALSE);
 
 				// yep this is bad .. todo: view+0x3C to 0x48 = m_FadeColorRGBA
-				DWORD* view = reinterpret_cast<DWORD*>(*(DWORD*)(CLIENT_BASE + 0x5390A0));
+				DWORD* view = reinterpret_cast<DWORD*>(*(DWORD*)(CLIENT_BASE + 0x55C15C));
 				void*** g_ViewEffects = reinterpret_cast<void***>(view);
 				char r, g, b, a;
 				char blend;
@@ -1724,24 +1724,24 @@ namespace mods::blackmesa
 		XASSERT(tbl_hk::model_renderer::table.init(tbl_hk::model_renderer::_interface) == false);
 		XASSERT(tbl_hk::model_renderer::table.hook(&tbl_hk::model_renderer::DrawModelExecute::Detour, tbl_hk::model_renderer::DrawModelExecute::Index) == false);
 
-		shared::utils::hook(RENDERER_BASE + 0x3C5E7, cmeshdx8_renderpass_pre_draw_stub, HOOK_JUMP).install()->quick();
-		HOOK_RETN_PLACE(cmeshdx8_renderpass_pre_draw_retn_addr, RENDERER_BASE + 0x3C5EC);
+		shared::utils::hook(RENDERER_BASE + 0x3C6D7, cmeshdx8_renderpass_pre_draw_stub, HOOK_JUMP).install()->quick();
+		HOOK_RETN_PLACE(cmeshdx8_renderpass_pre_draw_retn_addr, RENDERER_BASE + 0x3C6DC);
 
-		shared::utils::hook(RENDERER_BASE + 0x3C718, cmeshdx8_renderpass_post_draw_stub, HOOK_JUMP).install()->quick();
-		HOOK_RETN_PLACE(cmeshdx8_renderpass_post_draw_retn_addr, RENDERER_BASE + 0x3C727);
+		shared::utils::hook(RENDERER_BASE + 0x3C808, cmeshdx8_renderpass_post_draw_stub, HOOK_JUMP).install()->quick();
+		HOOK_RETN_PLACE(cmeshdx8_renderpass_post_draw_retn_addr, RENDERER_BASE + 0x3C817);
 
 		// C_FuncAreaPortalWindow::DrawModel :: disable drawing Area Portal Brushmodels
-		shared::utils::hook::conditional_jump_to_jmp(CLIENT_BASE + 0xC0210);
+		shared::utils::hook::conditional_jump_to_jmp(CLIENT_BASE + 0xCEEF0);
 
 		// Sky_HDR_DX9 :: GetFallbackShader -> ignore dxlevel and always fall back to Sky_DX9
-		shared::utils::hook::conditional_jump_to_jmp(STDSHADERDX9_BASE + 0x7B1EE);
+		shared::utils::hook::conditional_jump_to_jmp(STDSHADERDX9_BASE + 0x7E1BE);
 
 		// Water_DX9_HDR :: GetFallbackShader ^
-		shared::utils::hook::nop(STDSHADERDX9_BASE + 0x93A35, 5);
+		shared::utils::hook::nop(STDSHADERDX9_BASE + 0x96945, 5);
 
 		// Shader_WorldEnd - skip render flashlight stuff before drawing the sky
-		shared::utils::hook::conditional_jump_to_jmp(ENGINE_BASE + 0x10D060);
-		shared::utils::hook::conditional_jump_to_jmp(ENGINE_BASE + 0x10D07C);
+		shared::utils::hook::conditional_jump_to_jmp(ENGINE_BASE + 0x10DA10);
+		shared::utils::hook::conditional_jump_to_jmp(ENGINE_BASE + 0x10DA2C);
 
 
 #if 0
@@ -1789,10 +1789,10 @@ namespace mods::blackmesa
 		HOOK_RETN_PLACE(unbake_transform::R_StudioDrawPoints_retn_addr, STUDIORENDER_BASE + 0x109B4); // y
 #endif
 
-		shared::utils::hook::nop(STUDIORENDER_BASE + 0x10AC0, 7);
-		shared::utils::hook(STUDIORENDER_BASE + 0x10AC0, unbake_transform::R_StudioDrawStaticMesh_stub, HOOK_JUMP).install()->quick();
-		HOOK_RETN_PLACE(unbake_transform::R_StudioDrawStaticMesh_og_retn_addr, STUDIORENDER_BASE + 0x10AC7);
-		HOOK_RETN_PLACE(unbake_transform::R_StudioDrawStaticMesh_nop_retn_addr, STUDIORENDER_BASE + 0x10ACD);
+		shared::utils::hook::nop(STUDIORENDER_BASE + 0x10BB0, 7);
+		shared::utils::hook(STUDIORENDER_BASE + 0x10BB0, unbake_transform::R_StudioDrawStaticMesh_stub, HOOK_JUMP).install()->quick();
+		HOOK_RETN_PLACE(unbake_transform::R_StudioDrawStaticMesh_og_retn_addr, STUDIORENDER_BASE + 0x10BB7);
+		HOOK_RETN_PLACE(unbake_transform::R_StudioDrawStaticMesh_nop_retn_addr, STUDIORENDER_BASE + 0x10BBD);
 
 
 

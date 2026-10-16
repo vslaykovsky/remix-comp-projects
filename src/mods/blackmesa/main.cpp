@@ -51,9 +51,6 @@ namespace mods::blackmesa
 		shared::common::console();
 		std::uint32_t T = 0;
 
-		char exe_path[MAX_PATH]; GetModuleFileNameA(nullptr, exe_path, MAX_PATH);
-		const std::string sha1 = shared::utils::hash_file_sha1(exe_path);
-
 		std::cout << "[MAIN] Waiting for window with classname containing 'Valve001' ... \n";
 
 		{
@@ -80,11 +77,17 @@ namespace mods::blackmesa
 		GET_MODULE_HANDLE(game::vstdlib_module, "vstdlib.dll", T);
 		GET_MODULE_HANDLE(game::stdshader_dx9_module, "stdshader_dx9.dll", T);
 
+		if (!game::validate_supported_build()) {
+			game::compatibility_log("Unsupported or modified game build; no compatibility hooks installed.");
+			return 0;
+		}
+
 		if (!shared::common::flags::has_flag("nobeep")) {
 			Beep(523, 100);
 		}
 
 		mods::blackmesa::main();
+		game::compatibility_log("Compatibility hooks installed for Steam build 19042901.");
 		return 0;
 	}
 }

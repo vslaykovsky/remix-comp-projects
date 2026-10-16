@@ -269,7 +269,15 @@ namespace sdk
 		//INETVAR("DT_BasePlayer", "m_fFlags", get_flags, int);
 		INETVAR("DT_BasePlayer", "m_vecOrigin", get_vec_origin, Vector);
 		INETVAR("DT_BasePlayer", "m_vecViewOffset[0]", get_view_offset, Vector);
-		INETVAR("DT_BasePlayer", "bFlashlightEnabled", get_flashlight, bool);
+		INETVAR("DT_BlackMesaPlayer", "m_angEyeAngles[0]", get_eye_angles, Vector);
+
+		bool is_flashlight_active()
+		{
+			// Build 19042901: the client flashlight on/off byte moved from 0x13C5.
+			// m_bFlashlightEnabled is availability, not the current on/off state.
+			// The client fingerprint and its field-access instruction are checked at startup.
+			return read<bool>(0x13D5);
+		}
 
 		/*bool is_alive()
 		{

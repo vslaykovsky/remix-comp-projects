@@ -1,0 +1,70 @@
+Black Mesa build 19042901 compatibility validation - 2026-10-16
+
+Result and scope
+The tested gameplay paths work with RTX Remix enabled. This is a compatibility
+port with partial lighting content, not certification of a complete campaign.
+Validation stopped after representative laboratory, Surface Tension, and Lambda
+Complex checks. Xen, Interloper, and Nihilanth have not been validated.
+
+Configuration
+- Windows public Steam build 19042901; x86 Release compatibility plugin.
+- RTX Remix runtime e2f8119-845 and blackmesa-remix-poc-1.0.2.7z content.
+- NVIDIA GeForce RTX 3080 Laptop GPU, 16 GB VRAM; 1280x720 windowed.
+- Installed/tested ASI SHA256:
+  677d1ca5950bb38b1fc70019c082a42b46a14300fd50dcf00c647dc9d4ff4d58
+- Desktop automation used the optional -rtx-computer-use flag and m_rawinput 0.
+  Continuous movement also used timed engine +forward/+back commands because
+  the available desktop input interface has no explicit held-key duration.
+
+Build and binary verification
+- A separate checkout of upstream 006a02ec003358c3f063b197293023070127f5d5,
+  with this code patch and pinned submodules, built successfully using VS2022
+  MSVC v143 and Windows SDK 10.0.26100.0, Release Win32.
+- Zero build errors; two MSB8005 warnings from header-only dependency projects.
+- Offline verifier passed eight DLL fingerprints and 27 instruction checks on
+  the installed public build. It rejected the original 1.0 reference binaries.
+  This negative test was offline; it was not a second in-game rejection test.
+- Runtime log confirmed accepted fingerprints, installed hooks, rendered
+  frames, map loads, and flashlight transitions. Remix logs contained ray
+  tracing G-buffer, direct-lighting, indirect-lighting, and NRC activity.
+
+Gameplay checks
+PASS - Cold launch and loading an existing bm_c1a0b laboratory save.
+PASS - Creating a new save slot through the game UI.
+PASS - E interaction: scientist visibly responded by turning toward the player.
+PASS - Timed movement changed the player's position; Space produced a jump.
+PASS - Saving and reloading a test checkpoint restored its recorded position
+       and view angles exactly.
+PASS - Pistol mouse fire reduced clip ammunition from 17 to 16; R reloaded to
+       17 with 16 rounds remaining in reserve.
+PASS - Spawned headcrab animated and attacked; health dropped from 100 to 95.
+       Enemy death and extended combat were not tested.
+PASS - Player death via the kill command, followed by checkpoint recovery.
+PASS - Live changelevel from bm_c1a0b to bm_c1a1a and rendering scripted hazards.
+PASS - Direct load of bm_c2a5a (Surface Tension), short movement, and flashlight
+       toggle with visible beam and corresponding runtime state log.
+PASS - Direct load of bm_c3a2a (Lambda Complex) and corridor/weapon rendering.
+       Lambda-specific flashlight input was not verified.
+
+Test setup used developer commands for weapon/suit provisioning and controlled
+enemy/death scenarios. Cheats were turned off before later-map checks.
+Earlier testing also traversed the opening tram sequence into the laboratory;
+that evidence predates the final optional desktop-input shim.
+
+Observed limitations
+- Pistol muzzle flash displayed an opaque white polygon. Alpha/effect handling
+  remains defective; this test did not establish whether it is a new regression.
+- Later-map interiors, especially Lambda, remained very dark. Missing authored
+  lighting is a working hypothesis; matched vanilla/Remix captures are needed
+  to distinguish absent lights, material problems, exposure, and culling.
+- A direct map load establishes loading/rendering only. It does not validate
+  natural entry, every scripted event, puzzles, or chapter completion.
+- No end-to-end campaign run, exhaustive water/glass/particle coverage, Xen
+  checks, extended stability soak, or reproducible FPS benchmark was completed.
+- Spot samples showed approximately 4.9-6.6 GB of total GPU memory in use;
+  these are not exclusive game allocations or measured peak requirements.
+
+Evidence
+Local screenshots and logs were retained during validation. Raw game logs,
+save files, and proprietary game/content binaries are not included in this
+repository. See blackmesa-build19042901.txt for build and installation details.

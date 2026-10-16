@@ -126,12 +126,8 @@ namespace mods::blackmesa
 							std::cout << "[CLASSID] " << m_classes->network_name << " = " << m_classes->class_id << ",\n";
 						}
 #endif
-						switch (m_classes->class_id)
-						{
-						default:
-							continue;
-
-						case sdk::CBlackMesaPlayer:
+						// Network class IDs change when the game adds entity classes.
+						if (std::string_view(m_classes->network_name) == "CBlackMesaPlayer")
 						{
 							sdk::player_info_t info;
 							if (!intf->m_engine->get_player_info(i, &info)) {
@@ -141,9 +137,35 @@ namespace mods::blackmesa
 							if (const auto is_player = i == intf->m_engine->get_local_player();
 								is_player)
 							{
-								const auto& flashlight_enabled = entity->read<bool>(0x13C5);
+								const auto flashlight_enabled = entity->is_flashlight_active();
+								// Explicit test flag only: space commands in real time after a player exists.
+								// Startup +exec is too early, and cfg waits do not advance this test reliably.
+								static const bool smoke_test_requested = shared::common::flags::has_flag("rtx-smoke-test");
+								static auto next_test_step = GetTickCount64() + 30000;
+								static size_t test_step = 0;
+								static constexpr const char* test_commands[] = {
+									"echo RTX_TEST_SETUP; sv_cheats 1; give item_suit; gameui_hide; unpause\n",
+									"echo RTX_TEST_TOGGLE_1; impulse 100\n",
+									"echo RTX_TEST_TOGGLE_2; impulse 100\n",
+									"echo RTX_TEST_TOGGLE_3; impulse 100\n",
+									"echo RTX_TEST_MOVE_BEFORE; getpos; +forward\n",
+									"-forward; echo RTX_TEST_MOVE_AFTER; getpos; sv_cheats 0; echo RTX_TEST_COMPLETE\n"
+								};
+								if (smoke_test_requested && test_step < std::size(test_commands) && GetTickCount64() >= next_test_step)
+								{
+									game::compatibility_log("Smoke test step " + std::to_string(test_step + 1));
+									intf->m_engine->execute_client_cmd_unrestricted(test_commands[test_step++]);
+									next_test_step = GetTickCount64() + 5000;
+								}
+								static int last_flashlight_state = -1;
+								if (last_flashlight_state != static_cast<int>(flashlight_enabled))
+								{
+									game::compatibility_log(flashlight_enabled ? "Player flashlight: on" : "Player flashlight: off");
+									last_flashlight_state = flashlight_enabled;
+								}
 								const auto& eyepos = entity->get_eye_pos(); //entity->read<Vector>(0x1110);
-								const auto& QAngle = entity->read<Vector>(0x1710);
+								const auto eye_angles = entity->get_eye_angles();
+								const Vector QAngle(eye_angles.x, eye_angles.y, 0.0f);
 
 								const auto gs = game_settings::get();
 								const auto offs = gs->flashlight_offset_player.get_as<Vector*>();
@@ -180,8 +202,6 @@ namespace mods::blackmesa
 
 								//shared::common::remix_api::get().flashlight_create_or_update(info.name, eyepos, fwd, rt, up, flashlight_enabled);
 							}
-							break;
-						}
 						}
 					}
 				}
@@ -191,6 +211,10 @@ namespace mods::blackmesa
 
 	void on_renderview()
 	{
+		static unsigned int frame_count = 0;
+		if (++frame_count == 1 || frame_count == 300) {
+			game::compatibility_log("RenderView frame " + std::to_string(frame_count));
+		}
 		auto enginerender = game::get_engine_renderer();
 		const auto dev = game::get_d3d_device();
 
@@ -256,7 +280,7 @@ namespace mods::blackmesa
 		g_current_leaf = current_leaf;
 
 		// CM_LeafArea :: get current area the camera is in
-		g_current_area = shared::utils::hook::call<int(__cdecl)(int leafnum)>(ENGINE_BASE + 0x185A10)(current_leaf);
+		g_current_area = shared::utils::hook::call<int(__cdecl)(int leafnum)>(ENGINE_BASE + 0x186DC0)(current_leaf);
 
 		iterate_entities();
 		shared::common::remix_api::get().flashlight_frame();
@@ -271,7 +295,7 @@ namespace mods::blackmesa
 			call	on_renderview;
 			popad;
 
-			push    0x178; // og
+			push    0x9A0; // Build 19042901 view object allocation size.
 			jmp		cviewrenderer_renderview_retn;
 		}
 	}
@@ -282,6 +306,7 @@ namespace mods::blackmesa
 	 */
 	void on_map_load_hk(const char* map_name)
 	{
+		game::compatibility_log(std::string("Map load: ") + map_name);
 		imgui::on_map_load();
 		shared::common::remix_vars::on_map_load(map_name);
 		remix_lights::on_map_load();
@@ -660,7 +685,7 @@ namespace mods::blackmesa
 		if (is_monitor)
 		{
 			// R_CullNode - uses area frustums if avail. and not in a solid - uses player frustum otherwise
-			if (!shared::utils::hook::call<bool(__cdecl)(game::Frustum_t*, game::mnode_t*, int)>(ENGINE_BASE + 0x1379C0)(frustum, node, unkown_flag)) { // #OFFS
+			if (!shared::utils::hook::call<bool(__cdecl)(game::Frustum_t*, game::mnode_t*, int)>(ENGINE_BASE + 0x138450)(frustum, node, unkown_flag)) { // #OFFS
 				return 0;
 			}
 
@@ -694,7 +719,7 @@ namespace mods::blackmesa
 		}
 
 		// R_CullNode - uses area frustums if avail. and not in a solid - uses player frustum otherwise
-		if (!shared::utils::hook::call<bool(__cdecl)(game::Frustum_t*, game::mnode_t*, int)>(ENGINE_BASE + 0x1379C0)(frustum, node, unkown_flag)) { // #OFFS
+		if (!shared::utils::hook::call<bool(__cdecl)(game::Frustum_t*, game::mnode_t*, int)>(ENGINE_BASE + 0x138450)(frustum, node, unkown_flag)) { // #OFFS
 			return 0;
 		}
 
@@ -707,9 +732,10 @@ namespace mods::blackmesa
 	{
 		__asm
 		{
-			mov     ecx, ebx; // og
-			mov		[ebp - 8], esi; // og - esi = g_CurrentViewID
-			mov		game::saved_view_id, esi; // save to our global
+			// Build 19042901 holds the previous view ID in eax, this in esi.
+			mov		game::saved_view_id, eax;
+			mov		[ebp - 8], eax; // overwritten original instructions
+			mov		eax, [esi];
 			jmp		save_viewid_retn;
 		}
 	}
@@ -751,73 +777,74 @@ namespace mods::blackmesa
 		shared::common::loader::module_loader::register_module(std::make_unique<remix_lights>());
 
 		// CViewRender::DrawOneMonitor
-		shared::utils::hook::nop(CLIENT_BASE + 0x1F7E26, 6);
-		shared::utils::hook(CLIENT_BASE + 0x1F7E26, cviewrenderer_drawonemonitor_stub).install()->quick();
-		HOOK_RETN_PLACE(cviewrenderer_drawonemonitor_retn, CLIENT_BASE + 0x1F7E2C);
+		shared::utils::hook::nop(CLIENT_BASE + 0x208559, 6);
+		shared::utils::hook(CLIENT_BASE + 0x208559, cviewrenderer_drawonemonitor_stub).install()->quick();
+		HOOK_RETN_PLACE(cviewrenderer_drawonemonitor_retn, CLIENT_BASE + 0x20855F);
 
 		// CViewRender::RenderView :: "start" of current frame (after CViewRender::DrawMonitors)
-		shared::utils::hook(CLIENT_BASE + 0x1FE0F3, cviewrenderer_renderview_stub).install()->quick();
-		HOOK_RETN_PLACE(cviewrenderer_renderview_retn, CLIENT_BASE + 0x1FE0F8);
+		shared::utils::hook(CLIENT_BASE + 0x20F0F3, cviewrenderer_renderview_stub).install()->quick();
+		HOOK_RETN_PLACE(cviewrenderer_renderview_retn, CLIENT_BASE + 0x20F0F8);
 
 
 		// stub before calling 'R_RecursiveWorldNode' to override node/leaf vis
-		shared::utils::hook(ENGINE_BASE + 0x107225, pre_recursive_world_node_stub, HOOK_JUMP).install()->quick();
-		HOOK_RETN_PLACE(pre_recursive_world_node_retn, ENGINE_BASE + 0x10722A);
+		shared::utils::hook(ENGINE_BASE + 0x107BD5, pre_recursive_world_node_stub, HOOK_JUMP).install()->quick();
+		HOOK_RETN_PLACE(pre_recursive_world_node_retn, ENGINE_BASE + 0x107BDA);
 
 		// ^ :: while( ... node->contents < -1 .. ) -> jl to jle
-		shared::utils::hook::set<BYTE>(ENGINE_BASE + 0x10811D, 0x7E);
+		shared::utils::hook::set<BYTE>(ENGINE_BASE + 0x108ACD, 0x7E);
 
 		// ^ :: backface check -> je to jl
-		shared::utils::hook::nop(ENGINE_BASE + 0x108211, 2); // okay - draws a little more but not so heavy on perf.
+		shared::utils::hook::nop(ENGINE_BASE + 0x108BC1, 2); // okay - draws a little more but not so heavy on perf.
 
 		// ^ :: backface check -> jnz to je
-		shared::utils::hook::set<BYTE>(ENGINE_BASE + 0x10821A, 0x74);
+		shared::utils::hook::set<BYTE>(ENGINE_BASE + 0x108BCA, 0x74);
 
 		// R_DrawLeaf :: backface check (emissive lamps) plane normal >= -0.00999f
-		shared::utils::hook::nop(ENGINE_BASE + 0x1078F8, 2);
+		shared::utils::hook::nop(ENGINE_BASE + 0x1082A8, 2);
 
 		// ^ :: while( ... !R_CullNode) - wrapper function to impl. additional culling control (force areas/leafs + use frustum culling when needed)
-		shared::utils::hook(ENGINE_BASE + 0x108133, r_cullnode_wrapper, HOOK_CALL).install()->quick();
+		shared::utils::hook(ENGINE_BASE + 0x108AE3, r_cullnode_wrapper, HOOK_CALL).install()->quick();
 
 		// disable displacement culling
-		shared::utils::hook::nop(ENGINE_BASE + 0xED2FB, 2);
+		shared::utils::hook::nop(ENGINE_BASE + 0xEDDDB, 2);
 
 		// CBrushBatchRender::DrawOpaqueBrushModel :: :: backface check - nop 'if ( bShadowDepth )' to disable culling
 		//shared::utils::hook::nop(ENGINE_BASE + 0x7156E, 2); // 0125
-		shared::utils::hook::conditional_jump_to_jmp(ENGINE_BASE + 0x104796);
+		// Build 19042901 removed the old precomputed brush backface array
+		// and its per-surface rejection, so this patch is no longer needed.
 
 		// CClientLeafSystem::CollateRenderablesInLeaf :: skip culling checks
-		shared::utils::hook::nop(CLIENT_BASE + 0xFDCBF, 6);
+		shared::utils::hook::nop(CLIENT_BASE + 0x10C7FF, 6);
 
 		// CSimpleWorldView::Setup :: nop 'DoesViewPlaneIntersectWater' check
-		shared::utils::hook::nop(CLIENT_BASE + 0x1FF55D, 2);
+		shared::utils::hook::nop(CLIENT_BASE + 0x21055D, 2);
 
 		// ^ next instruction :: OR m_DrawFlags with 0x60 instead of 0x30
-		shared::utils::hook::set<BYTE>(CLIENT_BASE + 0x1FF55F + 6, 0x60);
+		shared::utils::hook::set<BYTE>(CLIENT_BASE + 0x210565, 0x60);
 
 		// CBaseWorldView::DrawSetup :: save 'g_CurrentViewID' 
-		shared::utils::hook(CLIENT_BASE + 0x1F8AD6, save_viewid_stub, HOOK_JUMP).install()->quick();
-		HOOK_RETN_PLACE(save_viewid_retn, CLIENT_BASE + 0x1F8ADB);
+		shared::utils::hook(CLIENT_BASE + 0x2091A2, save_viewid_stub, HOOK_JUMP).install()->quick();
+		HOOK_RETN_PLACE(save_viewid_retn, CLIENT_BASE + 0x2091A7);
 
 
 		// PixelVisibility_FractionVisible :: disable visiblity checks for glowsprites and other fx?
-		shared::utils::hook::nop(CLIENT_BASE + 0xD4D88, 2);
-		shared::utils::hook::conditional_jump_to_jmp(CLIENT_BASE + 0xD4DA6);
+		shared::utils::hook::nop(CLIENT_BASE + 0xE3B28, 2);
+		shared::utils::hook::conditional_jump_to_jmp(CLIENT_BASE + 0xE3B46);
 
 
 		// --
 
 		// CModelLoader::Map_LoadModel :: called on map load
-		shared::utils::hook::nop(ENGINE_BASE + 0x124B44, 6);
-		shared::utils::hook(ENGINE_BASE + 0x124B44, on_map_load_stub).install()->quick();
-		HOOK_RETN_PLACE(on_map_load_stub_retn, ENGINE_BASE + 0x124B4A);
+		shared::utils::hook::nop(ENGINE_BASE + 0x1255D4, 6);
+		shared::utils::hook(ENGINE_BASE + 0x1255D4, on_map_load_stub).install()->quick();
+		HOOK_RETN_PLACE(on_map_load_stub_retn, ENGINE_BASE + 0x1255DA);
 
 		// called on map unload
-		shared::utils::hook(ENGINE_BASE + 0x1CB3B1, on_host_disconnect_stub).install()->quick();
-		HOOK_RETN_PLACE(on_host_disconnect_retn, ENGINE_BASE + 0x1CB3B6);
+		shared::utils::hook(ENGINE_BASE + 0x1CC8B1, on_host_disconnect_stub).install()->quick();
+		HOOK_RETN_PLACE(on_host_disconnect_retn, ENGINE_BASE + 0x1CC8B6);
 
-		shared::utils::hook(ENGINE_BASE + 0x1B9F78, on_host_change_level_stub).install()->quick();
-		HOOK_RETN_PLACE(on_host_change_level_retn, ENGINE_BASE + 0x1B9F7D);
+		shared::utils::hook(ENGINE_BASE + 0x1BB328, on_host_change_level_stub).install()->quick();
+		HOOK_RETN_PLACE(on_host_change_level_retn, ENGINE_BASE + 0x1BB32D);
 
 		MH_EnableHook(MH_ALL_HOOKS);
 

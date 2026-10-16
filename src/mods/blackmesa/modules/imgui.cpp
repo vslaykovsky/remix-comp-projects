@@ -109,6 +109,28 @@ namespace mods::blackmesa
 	{
 		bool pass_msg_to_game = false;
 
+		// Some desktop automation supplies virtual keys without scan-code bits.
+		// Source uses those bits to resolve gameplay bindings. Repair only missing
+		// scans in this opt-in mode; preserve physical input and Unicode packets.
+		static const bool computer_use_input = []
+		{
+			const bool enabled = shared::common::flags::has_flag("rtx-computer-use");
+			if (enabled) game::compatibility_log("Computer Use keyboard compatibility enabled.");
+			return enabled;
+		}();
+		const bool keyboard_message = message_type == WM_KEYDOWN || message_type == WM_KEYUP
+			|| message_type == WM_SYSKEYDOWN || message_type == WM_SYSKEYUP;
+		if (computer_use_input && keyboard_message && ((lparam >> 16) & 0xFF) == 0
+			&& wparam > 0 && wparam < 255 && wparam != VK_PACKET)
+		{
+			const auto scan = MapVirtualKeyExW(static_cast<UINT>(wparam), MAPVK_VK_TO_VSC_EX, GetKeyboardLayout(0));
+			if (scan & 0xFF)
+			{
+				lparam |= static_cast<LPARAM>(scan & 0xFF) << 16;
+				if ((scan & 0xFF00) == 0xE000) lparam |= static_cast<LPARAM>(1) << 24;
+			}
+		}
+
 		if (imgui::get()->input_message(message_type, wparam, lparam, pass_msg_to_game) /*&& !pass_msg_to_game*/) {
 			return true;
 		}
